@@ -23,3 +23,25 @@ export const STATUS_LABEL: Record<string, string> = {
 };
 
 export const STATUS_ORDER = ["Reported", "Analyzed", "Prioritized", "InProgress", "Resolved"] as const;
+
+// Picks a handful of reports for the evidence view, cycling through
+// languages so multilingual clustering is visible at a glance.
+export function pickEvidence<T extends { language: string }>(reports: T[], count: number): T[] {
+  const byLanguage = new Map<string, T[]>();
+  for (const r of reports) {
+    const list = byLanguage.get(r.language) ?? [];
+    list.push(r);
+    byLanguage.set(r.language, list);
+  }
+  const languages = [...byLanguage.keys()];
+  const picked: T[] = [];
+  let i = 0;
+  while (picked.length < count && picked.length < reports.length) {
+    const lang = languages[i % languages.length];
+    const bucket = byLanguage.get(lang)!;
+    if (bucket.length > 0) picked.push(bucket.shift()!);
+    i++;
+    if (languages.every((l) => (byLanguage.get(l)?.length ?? 0) === 0)) break;
+  }
+  return picked;
+}
