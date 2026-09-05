@@ -2,10 +2,8 @@ import { db } from "./db";
 import { priorityLevel } from "./issue-helpers";
 
 export async function getDashboardStats() {
-  const [clusters, totalReports] = await Promise.all([
-    db.issueCluster.findMany({ orderBy: { priorityScore: "desc" } }),
-    db.report.count(),
-  ]);
+  const clusters = await db.issueCluster.findMany({ orderBy: { priorityScore: "desc" } });
+  const totalReports = clusters.reduce((sum, c) => sum + c.reportCount, 0);
 
   const activeIssues = clusters.filter((c) => c.status !== "Resolved").length;
   const criticalIssues = clusters.filter((c) => priorityLevel(c.priorityScore) === "critical").length;

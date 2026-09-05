@@ -167,7 +167,7 @@ export default function ReportPage() {
           ← Back
         </Link>
         <h1 className="mt-2 text-2xl font-semibold">Report a Civic Issue</h1>
-        <p className="text-sm text-slate-500">Tell us what's wrong — we'll route it to the right department.</p>
+        <p className="text-sm text-slate-500">Tell us what&apos;s wrong — we&apos;ll route it to the right department.</p>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-5">
