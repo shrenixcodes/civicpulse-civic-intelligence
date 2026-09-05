@@ -1,0 +1,81 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum IssueStatus {
+  Reported
+  Analyzed
+  Prioritized
+  InProgress
+  Resolved
+}
+
+model Report {
+  id          String   @id @default(cuid())
+  code        String   @unique
+  description String
+  language    String
+  imageUrl    String?  @map("image_url")
+  latitude    Float
+  longitude   Float
+  ward        String?
+
+  category    String?
+  subcategory String?
+  summary     String?
+  severity    Int?
+  urgency     Int?
+  confidence  Float?
+
+  clusterId String?       @map("cluster_id")
+  cluster   IssueCluster? @relation(fields: [clusterId], references: [id])
+
+  status    IssueStatus @default(Reported)
+  createdAt DateTime    @default(now()) @map("created_at")
+
+  @@index([clusterId])
+  @@map("reports")
+}
+
+model IssueCluster {
+  id                String @id @default(cuid())
+  title             String
+  category          String
+  summary           String
+  reportCount       Int    @default(0) @map("report_count")
+  severity          Int
+  urgency           Int
+  priorityScore     Int    @map("priority_score")
+  trend             Float  @default(0)
+  latitude          Float
+  longitude         Float
+  ward              String?
+  recommendedAction String @map("recommended_action")
+  status            IssueStatus @default(Reported)
+  embedding         Float[]     @default([])
+
+  reports       Report[]
+  statusHistory StatusHistory[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("issue_clusters")
+}
+
+model StatusHistory {
+  id        String       @id @default(cuid())
+  clusterId String       @map("cluster_id")
+  cluster   IssueCluster @relation(fields: [clusterId], references: [id])
+  oldStatus IssueStatus  @map("old_status")
+  newStatus IssueStatus  @map("new_status")
+  createdAt DateTime     @default(now()) @map("created_at")
+
+  @@index([clusterId])
+  @@map("status_history")
+}
