@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { Sparkles, Send, Loader2 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 
@@ -41,7 +42,10 @@ export function AskPanel() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Ask CivicPulse</CardTitle>
+        <CardTitle className="flex items-center gap-1.5">
+          <Sparkles className="h-3.5 w-3.5 text-blue-500" />
+          Ask CivicPulse
+        </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
         {messages.length === 0 && (
@@ -50,7 +54,7 @@ export function AskPanel() {
               <button
                 key={s}
                 onClick={() => ask(s)}
-                className="rounded-full border border-slate-200 px-3 py-1.5 text-xs text-slate-600 hover:bg-slate-50"
+                className="rounded-full border border-slate-200 px-3 py-1.5 text-xs text-slate-600 transition-colors hover:border-blue-200 hover:bg-blue-50 hover:text-blue-700"
               >
                 {s}
               </button>
@@ -66,6 +70,12 @@ export function AskPanel() {
                 <p className="whitespace-pre-line rounded-lg bg-slate-50 p-3 text-sm text-slate-700">{m.answer}</p>
               </div>
             ))}
+            {loading && (
+              <div className="flex items-center gap-2 text-xs text-slate-400">
+                <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                Thinking…
+              </div>
+            )}
           </div>
         )}
 
@@ -82,8 +92,8 @@ export function AskPanel() {
             placeholder="Ask about civic issues..."
             className="h-10 flex-1 rounded-lg border border-slate-300 px-3 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
           />
-          <Button type="submit" disabled={loading}>
-            {loading ? "…" : "Ask"}
+          <Button type="submit" disabled={loading} className="px-3">
+            {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
           </Button>
         </form>
       </CardContent>

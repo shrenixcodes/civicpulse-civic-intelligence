@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import Link from "next/link";
+import { Map, X, MapPinned } from "lucide-react";
 import type { IssueCluster } from "@prisma/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -47,7 +48,10 @@ export function IssueMap({ clusters }: { clusters: IssueCluster[] }) {
   return (
     <Card>
       <CardHeader className="flex-row items-center justify-between">
-        <CardTitle>Civic Issue Map</CardTitle>
+        <CardTitle className="flex items-center gap-1.5">
+          <Map className="h-3.5 w-3.5 text-slate-400" />
+          Civic Issue Map
+        </CardTitle>
         <span className="text-xs text-slate-400">Bubble size = report volume</span>
       </CardHeader>
       <CardContent>
@@ -92,7 +96,8 @@ export function IssueMap({ clusters }: { clusters: IssueCluster[] }) {
             {selected ? (
               <HotspotPreview issue={selected} onClose={() => setSelected(null)} />
             ) : (
-              <div className="flex h-full flex-col justify-center gap-3 rounded-lg border border-dashed border-slate-200 p-6 text-center text-sm text-slate-400">
+              <div className="flex h-full flex-col items-center justify-center gap-3 rounded-lg border border-dashed border-slate-200 p-6 text-center text-sm text-slate-400">
+                <MapPinned className="h-6 w-6 text-slate-300" />
                 <p>Click a hotspot to see details.</p>
                 <Legend />
               </div>
@@ -121,10 +126,14 @@ function HotspotPreview({ issue, onClose }: { issue: IssueCluster; onClose: () =
   const level = priorityLevel(issue.priorityScore);
   return (
     <div className="rounded-lg border border-slate-200 p-4">
-      <div className="flex items-start justify-between">
+      <div className="flex items-start justify-between gap-2">
         <h4 className="font-semibold text-slate-900">{issue.title}</h4>
-        <button onClick={onClose} className="text-slate-400 hover:text-slate-600" aria-label="Close">
-          ✕
+        <button
+          onClick={onClose}
+          className="shrink-0 rounded p-0.5 text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-600"
+          aria-label="Close"
+        >
+          <X className="h-4 w-4" />
         </button>
       </div>
       <div className="mt-2 flex items-center gap-2">

@@ -2,6 +2,7 @@
 
 import { useState, useRef } from "react";
 import Link from "next/link";
+import { ArrowLeft, MapPin, Camera, CheckCircle2, Loader2, Send, MessageSquareText, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Textarea, Select } from "@/components/ui/input";
@@ -125,22 +126,26 @@ export default function ReportPage() {
   if (result) {
     return (
       <div className="mx-auto flex min-h-screen max-w-md flex-col items-center justify-center gap-6 p-6 text-center">
-        <div className="flex h-16 w-16 items-center justify-center rounded-full bg-emerald-100 text-3xl">✓</div>
+        <div className="flex h-16 w-16 items-center justify-center rounded-full bg-emerald-100">
+          <CheckCircle2 className="h-8 w-8 text-emerald-600" strokeWidth={2} />
+        </div>
         <div>
-          <h1 className="text-xl font-semibold">Report submitted successfully.</h1>
+          <h1 className="text-xl font-semibold text-slate-900">Report submitted successfully.</h1>
           <p className="mt-2 text-sm text-slate-500">Report ID</p>
-          <p className="text-lg font-mono font-semibold">{result.code}</p>
+          <p className="text-lg font-mono font-semibold tracking-tight">{result.code}</p>
         </div>
         <Card className="w-full">
           <CardContent className="flex items-center justify-center gap-2 py-4 text-sm">
             <span className="text-slate-400">AI Analyzing</span>
-            <span>→</span>
+            <span className="text-slate-300">→</span>
             <span className="text-slate-400">Clustered</span>
-            <span>→</span>
+            <span className="text-slate-300">→</span>
             <span className="font-medium text-emerald-600">Prioritized</span>
           </CardContent>
         </Card>
-        <p className="text-sm text-slate-500">Classified as <strong>{result.category}</strong></p>
+        <p className="text-sm text-slate-500">
+          Classified as <strong className="text-slate-700">{result.category}</strong>
+        </p>
         <div className="flex gap-3">
           <Link href={`/report/status/${result.code}`}>
             <Button variant="outline">Check status</Button>
@@ -163,16 +168,20 @@ export default function ReportPage() {
   return (
     <div className="mx-auto w-full max-w-lg p-6">
       <div className="mb-6">
-        <Link href="/" className="text-sm text-slate-500 hover:underline">
-          ← Back
+        <Link href="/" className="flex items-center gap-1 text-sm text-slate-500 transition-colors hover:text-slate-700">
+          <ArrowLeft className="h-3.5 w-3.5" />
+          Back
         </Link>
-        <h1 className="mt-2 text-2xl font-semibold">Report a Civic Issue</h1>
+        <h1 className="mt-2 text-2xl font-semibold tracking-tight text-slate-900">Report a Civic Issue</h1>
         <p className="text-sm text-slate-500">Tell us what&apos;s wrong — we&apos;ll route it to the right department.</p>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-5">
         <div>
-          <label className="mb-1 block text-sm font-medium">Problem description</label>
+          <label className="mb-1 flex items-center gap-1.5 text-sm font-medium">
+            <MessageSquareText className="h-3.5 w-3.5 text-slate-400" />
+            Problem description
+          </label>
           <Textarea
             rows={5}
             placeholder="E.g. No water supply on our street for three days..."
@@ -182,7 +191,10 @@ export default function ReportPage() {
         </div>
 
         <div>
-          <label className="mb-1 block text-sm font-medium">Language</label>
+          <label className="mb-1 flex items-center gap-1.5 text-sm font-medium">
+            <Globe className="h-3.5 w-3.5 text-slate-400" />
+            Language
+          </label>
           <Select value={language} onChange={(e) => setLanguage(e.target.value as Language)}>
             <option value="English">English</option>
             <option value="Hindi">हिन्दी (Hindi)</option>
@@ -191,10 +203,14 @@ export default function ReportPage() {
         </div>
 
         <div>
-          <label className="mb-1 block text-sm font-medium">Location</label>
+          <label className="mb-1 flex items-center gap-1.5 text-sm font-medium">
+            <MapPin className="h-3.5 w-3.5 text-slate-400" />
+            Location
+          </label>
           <div className="flex flex-col gap-2">
-            <Button type="button" variant="outline" onClick={useMyLocation} disabled={locating}>
-              {locating ? "Locating…" : "📍 Use my location"}
+            <Button type="button" variant="outline" onClick={useMyLocation} disabled={locating} className="gap-2">
+              {locating ? <Loader2 className="h-4 w-4 animate-spin" /> : <MapPin className="h-4 w-4" />}
+              {locating ? "Locating…" : "Use my location"}
             </Button>
             <span className="text-center text-xs text-slate-400">or pick a demo location</span>
             <Select
@@ -214,7 +230,8 @@ export default function ReportPage() {
               ))}
             </Select>
             {coords && (
-              <p className="text-xs text-emerald-600">
+              <p className="flex items-center gap-1 text-xs text-emerald-600">
+                <CheckCircle2 className="h-3.5 w-3.5" />
                 Location set{coords.ward ? ` — ${coords.ward}` : ""} ({coords.latitude.toFixed(4)}, {coords.longitude.toFixed(4)})
               </p>
             )}
@@ -222,13 +239,16 @@ export default function ReportPage() {
         </div>
 
         <div>
-          <label className="mb-1 block text-sm font-medium">Photo (optional)</label>
+          <label className="mb-1 flex items-center gap-1.5 text-sm font-medium">
+            <Camera className="h-3.5 w-3.5 text-slate-400" />
+            Photo (optional)
+          </label>
           <input
             ref={fileInputRef}
             type="file"
             accept="image/*"
             onChange={handleImageChange}
-            className="block w-full text-sm text-slate-500 file:mr-3 file:rounded-lg file:border-0 file:bg-slate-100 file:px-3 file:py-2 file:text-sm"
+            className="block w-full text-sm text-slate-500 file:mr-3 file:rounded-lg file:border-0 file:bg-slate-100 file:px-3 file:py-2 file:text-sm file:font-medium file:text-slate-700 hover:file:bg-slate-200"
           />
           {imagePreview && (
             // eslint-disable-next-line @next/next/no-img-element
@@ -238,7 +258,8 @@ export default function ReportPage() {
 
         {error && <p className="text-sm text-red-600">{error}</p>}
 
-        <Button type="submit" size="lg" className="w-full" disabled={submitting}>
+        <Button type="submit" size="lg" className="w-full gap-2" disabled={submitting}>
+          {submitting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
           {submitting ? "Submitting…" : "Submit report"}
         </Button>
       </form>

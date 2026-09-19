@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { Loader2 } from "lucide-react";
 import { Select } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { STATUS_LABEL, STATUS_ORDER } from "@/lib/issue-helpers";
@@ -34,7 +35,8 @@ export function StatusControl({ issueId, currentStatus }: { issueId: string; cur
           </option>
         ))}
       </Select>
-      <Button size="sm" onClick={save} disabled={saving || status === currentStatus}>
+      <Button size="sm" onClick={save} disabled={saving || status === currentStatus} className="gap-1.5">
+        {saving && <Loader2 className="h-3.5 w-3.5 animate-spin" />}
         {saving ? "Saving…" : "Update status"}
       </Button>
     </div>

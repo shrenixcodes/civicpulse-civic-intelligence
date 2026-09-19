@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { ArrowLeft, Wrench, CheckCircle2 } from "lucide-react";
 import { db } from "@/lib/db";
 import { Card, CardContent } from "@/components/ui/card";
 import { STATUS_LABEL, STATUS_ORDER } from "@/lib/issue-helpers";
@@ -14,13 +15,14 @@ export default async function ReportStatusPage({ params }: { params: Promise<{ c
 
   return (
     <div className="mx-auto flex min-h-screen max-w-md flex-col justify-center gap-6 p-6">
-      <Link href="/report" className="text-sm text-slate-500 hover:underline">
-        ← Report another issue
+      <Link href="/report" className="flex items-center gap-1 text-sm text-slate-500 transition-colors hover:text-slate-700">
+        <ArrowLeft className="h-3.5 w-3.5" />
+        Report another issue
       </Link>
 
       <div>
         <p className="text-sm text-slate-500">Report ID</p>
-        <p className="text-lg font-mono font-semibold">{report.code}</p>
+        <p className="text-lg font-mono font-semibold tracking-tight">{report.code}</p>
       </div>
 
       <Card>
@@ -48,12 +50,14 @@ export default async function ReportStatusPage({ params }: { params: Promise<{ c
           </div>
 
           {report.status === "InProgress" && (
-            <p className="rounded-lg bg-blue-50 p-3 text-sm text-blue-800">
+            <p className="flex items-center gap-2 rounded-lg bg-blue-50 p-3 text-sm text-blue-800">
+              <Wrench className="h-4 w-4 shrink-0" />
               Your issue is now being addressed.
             </p>
           )}
           {report.status === "Resolved" && (
-            <p className="rounded-lg bg-emerald-50 p-3 text-sm text-emerald-800">
+            <p className="flex items-center gap-2 rounded-lg bg-emerald-50 p-3 text-sm text-emerald-800">
+              <CheckCircle2 className="h-4 w-4 shrink-0" />
               This issue has been marked resolved.
             </p>
           )}

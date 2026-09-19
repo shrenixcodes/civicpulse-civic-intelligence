@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { ArrowLeft, Radio } from "lucide-react";
 import { getDashboardStats } from "@/lib/stats";
 import { getAIProviderName } from "@/lib/ai";
 import { KpiCards } from "@/components/dashboard/kpi-cards";
@@ -16,14 +17,23 @@ export default async function DashboardPage() {
 
   return (
     <div className="min-h-screen bg-slate-50">
-      <header className="border-b border-slate-200 bg-white">
-        <div className="mx-auto flex max-w-7xl flex-col gap-3 px-6 py-6 sm:flex-row sm:items-center sm:justify-between">
+      <header className="sticky top-0 z-10 border-b border-slate-200 bg-white/80 backdrop-blur-sm">
+        <div className="mx-auto flex max-w-7xl flex-col gap-3 px-6 py-5 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <Link href="/" className="text-xs text-slate-400 hover:underline">
-              ← CivicPulse
+            <Link
+              href="/"
+              className="mb-1 flex items-center gap-1 text-xs font-medium text-slate-400 transition-colors hover:text-slate-600"
+            >
+              <ArrowLeft className="h-3 w-3" />
+              CivicPulse
             </Link>
-            <h1 className="text-2xl font-semibold text-slate-900">CivicPulse Command Center</h1>
-            <p className="text-sm text-slate-500">Turning citizen voices into civic action.</p>
+            <div className="flex items-center gap-2.5">
+              <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-600">
+                <Radio className="h-4 w-4 text-white" strokeWidth={2.5} />
+              </span>
+              <h1 className="text-2xl font-semibold tracking-tight text-slate-900">CivicPulse Command Center</h1>
+            </div>
+            <p className="mt-0.5 text-sm text-slate-500">Turning citizen voices into civic action.</p>
           </div>
           <div className="flex items-center gap-3">
             <Badge variant="info">{provider === "gemini" ? "Gemini AI" : "Demo AI (offline)"}</Badge>
